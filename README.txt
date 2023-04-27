@@ -30,6 +30,11 @@ Request it, give me the offset addr, or add it in yourself. This is just
 something I'm doing. 
 
 
+## What actually works?
+
+You can change your name, your rival's name, and the amount of pokedollars you
+have. My next part might be items or pokemon in your party. I'm uncertain.
+
 ## How to run
 
 ```
