@@ -1,0 +1,12 @@
+# April 26, 2023
+
+* Created the changelog file, knowing that I should have been using git.
+* Added checksum subroutine
+* Add text-table conversion
+* I changed vector "offset" to "mem". It made no sense to call it "offset" when
+  it was the set that is mem contains offsets.
+* Tested modMem subroutine (changed the first char in OT name to "Z".): It
+  worked.
+* Tested the save feature. It works.
+* Finally got the money edit to work.
+* Probably going to push this up in a few moments.

@@ -1,0 +1,30 @@
+Stuff to keep in mind.
+
+##
+# Random note
+##
+
+I have found three offset points require an ending with 0x50:
+0x259E, 0x25FD, 2C5E
+
+0x259E is the trainer, 0x25FD is the rival, but I am uncertain what 2C5E is at
+this time.
+
+
+##
+# Specific offset points
+##
+
+# TRAINER NAME:
+OFFSET: 0x2598 - 0x259E
+NOTE: It must end with 0x50
+
+# RIVAL NAME:
+OFFSET: 0x25F6 - 0x25FD
+NOTE: It must end with 0x50
+
+# MONEY:
+OFFSET: 0x25F3 - 0x25F5
+NOTE: Reads hex weird. Only accepts 0-9. Basically, do not convert with money. 
+
+
