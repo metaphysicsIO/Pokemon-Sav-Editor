@@ -10,6 +10,7 @@ I have found three offset points require an ending with 0x50:
 0x259E is the trainer, 0x25FD is the rival, but I am uncertain what 2C5E is at
 this time.
 
+What is the items one can have in their pocket? 
 
 ##
 # Specific offset points
@@ -27,4 +28,13 @@ NOTE: It must end with 0x50
 OFFSET: 0x25F3 - 0x25F5
 NOTE: Reads hex weird. Only accepts 0-9. Basically, do not convert with money. 
 
+# ITEM BAG
+OFFSET: 0x25C9
+NOTE: This is the amount of items held.
+
+OFFSET: 0x25CA
+NOTE: This is the identifier for ITEM #0
+
+OFFSET: 0x25CB
+NOTE: This is the quantity for ITEM #0
 
