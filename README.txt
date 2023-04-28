@@ -33,7 +33,15 @@ something I'm doing.
 ## What actually works?
 
 You can change your name, your rival's name, and the amount of pokedollars you
-have. My next part might be items or pokemon in your party. I'm uncertain.
+have.
+
+Right now I'm working on getting the data for editing items in the player's
+pocket and I have plans to make an edit subroutine for the actual pokemon
+themselves. Once the editor subroutine is finished, I will simply need to setup
+the offsets per party, then per box. I'll worry about pokemon editing later
+though.
+
+
 
 ## How to run
 
