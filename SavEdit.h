@@ -26,6 +26,7 @@ class SavEdit
         void cashModify();
         bool select();
         void clear();
+        void debug();
 
     private:
         std::string filename;

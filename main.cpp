@@ -33,19 +33,21 @@ int main(int argc, char *argv[])
     //save.modify(0x2598, 0x259E);
 
     // TEST OPTIONS
-    bool done = false;
+    bool done = true; //false;
     while(!done)
         done = save.select();
 
+    // To make things faster.
+    save.debug();
 
     // Test the rival.
     //save.modify(0x25F6, 0x25FC);
 
     // Update the checksum.
-    //save.checksum();
+    save.checksum();
 
     // Save the new file
-    //save.saveNewFile();
+    save.saveNewFile();
 
     return 0;
 }

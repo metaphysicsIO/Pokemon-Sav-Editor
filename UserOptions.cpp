@@ -56,6 +56,7 @@ void SavEdit::modify(const int BEGIN, const int END)
                 mem.at(BEGIN + i) = 0x50;
     }
 
+
 }
 
 void SavEdit::cashModify()
@@ -136,7 +137,8 @@ bool SavEdit::select()
         std::cout << "\t1. Player Name" << std::endl;
         std::cout << "\t2. RIVAL Name" << std::endl;
         std::cout << "\t3. MONEY" << std::endl;
-        std::cout << "\t4. QUIT, DO NOT SAVE" << std::endl;
+        //std::cout << "\t4. QUIT, DO NOT SAVE" << std::endl;
+        std::cout << "\t4. EDIT ITEM #0." << std::endl;
         std::cout << "\t0. SAVE AND QUIT" << std::endl;
         std::cout << "YOUR INPUT: ";
 
@@ -191,4 +193,32 @@ bool SavEdit::select()
     // TODO: Display what is currently there
 
     return finished;
+}
+
+void SavEdit::debug()
+{
+    /*
+     * This subroutine is just for
+     * getting information. It
+     * shouldn't be used otherwise.
+     */
+
+    // CURRENT TASK:
+    //  - Finding out all 255 items
+
+    int startingval = 0xC0;
+    int inc = 4;
+
+    int s = startingval + inc;
+
+    std::cout << "Items added to: " << std::endl;
+    mem.at(0x25CA) = s + 0; // ITEM #0 ID
+    std::cout << std::hex << s+0 << std::endl;
+    mem.at(0x25CC) = s + 1; // ITEM #1 ID
+    std::cout << std::hex << s+1 << std::endl;
+    mem.at(0x25CE) = s + 2; // ITEM #2 ID
+    std::cout << std::hex << s+2 << std::endl;
+    mem.at(0x25D0) = s + 3; // ITEM #3
+    std::cout << std::hex << s+3 << std::endl;
+
 }
