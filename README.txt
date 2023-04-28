@@ -55,15 +55,6 @@ $ ./SE.o [FILENAME].sav
 
 Make a PR.
 
-## Where are you?
-
-* I'm required to use 2FA apparently so if I'm not back up, that's why. I'll see
-about fixing that when I can.
-
-* I'm also working on two degrees right now. (Mathematics and Computer Science)
-
-* I'll try to be around when I can.
-
 ## Goal
 
 The goal of this project is to basically create a PKHeX replacement for Linux.
