@@ -27,6 +27,7 @@ class SavEdit
         bool select();
         void clear();
         void debug();
+        void displayItems();
 
     private:
         std::string filename;
