@@ -205,23 +205,31 @@ void SavEdit::debug()
 
     // CURRENT TASK:
     //  [x] Finding out all 255 items
-    //  [ ] How many item slots are available?
+    //  [x] How many item slots are available?
+    //          I suspect 25. (0x25CA to 0x25FC ?)
+    //  [ ] Create subroutine for: item edit, item value edit
 
+    // Top of HM/TM list.
     int startingval = 0xC0;
-    int inc = 4;
+    int inc = 4; 
 
     int s = startingval + inc;
 
-    std::cout << "Items added to: " << std::endl;
-    mem.at(0x25CA) = s + 0; // ITEM #0 ID
-    std::cout << std::hex << s+0 << std::endl;
-    mem.at(0x25CC) = s + 1; // ITEM #1 ID
-    std::cout << std::hex << s+1 << std::endl;
-    mem.at(0x25CE) = s + 2; // ITEM #2 ID
-    std::cout << std::hex << s+2 << std::endl;
-    mem.at(0x25D0) = s + 3; // ITEM #3
-    std::cout << std::hex << s+3 << std::endl;
+    std::cout << "Setting items to 25." << std::endl;
+    mem.at(0x25C9) = 0x19;
 
+    // Testing item ceiling
+    for(int i = 0; i <= 0x19; ++i)
+    {
+        std::cout << "Item added at addr: " << std::endl;
+        mem.at(0x25CA + (i * 2)) = s + i;
+        std::cout << std::hex << s + i << std::endl;
+        if(i == 0x19)
+        {
+            // Set cancel properly.
+            mem.at(0x25CA + (i * 2)) = 0xFF;
+        }
+    }
 }
 
 void SavEdit::displayItems()
