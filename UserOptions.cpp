@@ -209,6 +209,12 @@ void SavEdit::debug()
     //          I suspect 25. (0x25CA to 0x25FC ?)
     //  [ ] Create subroutine for: item edit, item value edit
 
+    // ITEM EDIT IDEA:
+    //  1. Display item list
+    //  2. Select item from list to edit
+    //  3. Display list of item options
+    //  4. Write item option + amount, if applicable
+
     // Top of HM/TM list.
     int startingval = 0xC0;
     int inc = 4; 
