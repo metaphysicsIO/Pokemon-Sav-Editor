@@ -34,6 +34,7 @@ class SavEdit
         std::vector<int> mem;
         enum language{en_US=0, ie_gle=1, ja_jp=2};
         int lang;
+        int m_changes = 0;
 };
 
 #endif

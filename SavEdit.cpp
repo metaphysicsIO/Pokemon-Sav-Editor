@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <ctime>
 
 #include "SavEdit.h"
 
@@ -57,15 +58,15 @@ void SavEdit::read()
 void SavEdit::save(std::string fname)
 {
     /*
-     * This subroutine writes the binary
-     * file using the offset vector.
+     * Writes the binary file using the
+     * offset vector.
      */
 
     std::ofstream bfs(fname, std::ios::out | std::ios::binary);
 
     if(!bfs)
     {
-        // TODO: Translate + subroutine needed.
+        // TODO: Translate + add subroutine needed.
         std::cout << "Cannot create file." << std::endl;
         exit(2);
     }
@@ -82,7 +83,12 @@ void SavEdit::backup()
      * before editing.
      */
 
-    save(getFilename() + ".BAK");
+    // Generate backup file name
+    std::string backup_name = "." + getFilename() ".BAK-" + std::to_string(m_changes);
+
+    save(backup_name);
+    
+    m_changes++;
 }
 
 int SavEdit::checksum()
