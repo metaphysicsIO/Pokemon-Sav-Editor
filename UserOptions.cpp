@@ -75,7 +75,8 @@ void SavEdit::cashModify()
     {
         std::cout << "input (numbers only): " << std::endl;
 
-        std::cin >> s;
+        // This should fix the hex->deci issue.
+        std::cin >> std::hex >> s;
 
         if(atoi(s.c_str()) <= 999999)
         {
