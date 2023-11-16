@@ -28,6 +28,10 @@ class SavEdit
         void clear();
         void debug();
         void displayItems();
+        void printMovelist();
+        int selectStat();
+        void modMainMenu();
+        void modStats(int, int, int);
 
     private:
         std::string filename;

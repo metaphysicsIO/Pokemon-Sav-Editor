@@ -38,7 +38,12 @@ int main(int argc, char *argv[])
         done = save.select();
 
     // To make things faster.
-    save.debug();
+    //save.debug();
+
+    // testing modStats
+    //save.modStats();
+    save.modMainMenu();
+    std::cout << "stats modified." << std::endl;
 
     // Test the rival.
     //save.modify(0x25F6, 0x25FC);

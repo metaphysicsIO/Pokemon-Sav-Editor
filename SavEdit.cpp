@@ -84,7 +84,7 @@ void SavEdit::backup()
      */
 
     // Generate backup file name
-    std::string backup_name = "." + getFilename() ".BAK-" + std::to_string(m_changes);
+    std::string backup_name = "." + getFilename() + ".BAK-" + std::to_string(m_changes);
 
     save(backup_name);
     
@@ -161,3 +161,5 @@ void SavEdit::saveNewFile()
 
     save(getFilename());
 }
+
+

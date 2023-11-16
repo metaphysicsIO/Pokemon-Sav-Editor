@@ -6,7 +6,7 @@
 void SavEdit::clear()
 {
     /*
-     * Weird screen clear trick I do not remember where I learned it.
+     * Operating system agnostic function that clears the screen.
      */
     std::cout << "\033[2J\033[1;1H";
 }
