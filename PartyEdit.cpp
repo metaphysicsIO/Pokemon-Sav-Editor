@@ -1,14 +1,244 @@
 #include <iostream>
 #include <cstring>
 #include <iomanip>
+#include <map>
 
 #include "SavEdit.h"
+
+
+/*
+ *      NOTES FOR MYSELF: DELETE LATER.
+ *
+ * Noticed a big difference between Party 1 and Party 2 ID when compared
+ * to their respective attributes.
+ *
+ * The range between Party #2's ID and MOVE 1 is 3A.
+ * The range between Party #1's ID and MOVE 1 is F.
+ * 
+ * That is 2B, or 43 spaces between them. 
+ * 
+ * There is also a possibly 2nd ID for P#2 at 0x2F4C
+ * which would come out to 1C. I suspect this isn't correc.t
+ * 
+ * But I may have solved it
+ *
+ * Let's see the difference between P1.ATK, P2.ATK and P1.DEF, P2.DEF:
+ * P1.ATK - P2.ATK is |0x2f59 - 0x2F85| = 2C (44)
+ * P1.DEF - P2.DEF is |0x2F5B - 0x2F87| = 2C (44)
+ * 
+ * So for stats, we can simply add 44(n) where n is the party #-1.
+ * What about for moves?
+ * 
+ * P1.MOVE1 - P2.MOVE1 is |0x2F3C - 0x2F68| = 2C (44)
+ * 
+ * This is fine. This means the identification change will be
+ * 0x2F2C + n, where n is the party number and the stats will
+ * be changed with the memory offset + 44(n-1), where n is the party number.
+ *
+ *
+ */
+
+void SavEdit::pkmnMap()
+{
+    /*
+     * Generates the mapping for pkmn values.
+     */
+
+    pkmn["94"] = "Abra";
+    pkmn["ab"] = "Aerodactyl";
+    pkmn["95"] = "Alakazam";
+    pkmn["02"] = "Kangaskhan";
+    pkmn["2d"] = "Arbok";
+    pkmn["14"] = "Arcanine";
+    pkmn["4a"] = "Articuno";
+    pkmn["72"] = "Beedrill";
+    pkmn["bc"] = "Bellsprout";
+    pkmn["1c"] = "Blastoise";
+    pkmn["99"] = "Bulbasaur";
+    pkmn["7d"] = "Butterfree";
+    pkmn["7b"] = "Caterpie";
+    pkmn["28"] = "Chansey";
+    pkmn["b4"] = "Charizard";
+    pkmn["b0"] = "Charmander";
+    pkmn["b2"] = "Charmeleon";
+    pkmn["8e"] = "Clefable";
+    pkmn["8b"] = "Cloyster";
+    pkmn["11"] = "Cubone";
+    pkmn["78"] = "Dewgong";
+    pkmn["3b"] = "Diglett";
+    pkmn["4c"] = "Ditto";
+    pkmn["74"] = "Dodrio";
+    pkmn["46"] = "Doduo";
+    pkmn["59"] = "Dragonair";
+    pkmn["42"] = "Dragonite";
+    pkmn["58"] = "Dratini";
+    pkmn["30"] = "Drowzee";
+    pkmn["76"] = "Dugtrio";
+    pkmn["66"] = "Eevee";
+    pkmn["6c"] = "Ekans";
+    pkmn["35"] = "Electabuzz";
+    pkmn["8d"] = "Electrode";
+    pkmn["0c"] = "Exeggcute";
+    pkmn["0a"] = "Exeggutor";
+    pkmn["40"] = "Farfetch'd";
+    pkmn["23"] = "Fearow";
+    pkmn["67"] = "Flareon";
+    pkmn["19"] = "Gastly";
+    pkmn["0e"] = "Gengar";
+    pkmn["a9"] = "Geodude";
+    pkmn["ba"] = "Gloom";
+    pkmn["82"] = "Golbat";
+    pkmn["9d"] = "Goldeen";
+    pkmn["80"] = "Golduck";
+    pkmn["31"] = "Golem";
+    pkmn["27"] = "Graveler";
+    pkmn["0d"] = "Grimer";
+    pkmn["21"] = "Growlithe";
+    pkmn["16"] = "Gyarados";
+    pkmn["93"] = "Haunter";
+    pkmn["2c"] = "Hitmonchan";
+    pkmn["2b"] = "Hitmonlee";
+    pkmn["5c"] = "Horsea";
+    pkmn["01"] = "hydon";
+    pkmn["81"] = "Hypno";
+    pkmn["07"] = "Nidoking";
+    pkmn["03"] = "Nidoran♂";
+    pkmn["64"] = "Jigglypuff";
+    pkmn["68"] = "Jolteon";
+    pkmn["48"] = "Jynx";
+    pkmn["5a"] = "Kabuto";
+    pkmn["5b"] = "Kabutops";
+    pkmn["26"] = "Kadabra";
+    pkmn["71"] = "Kakuna";
+    pkmn["8a"] = "Kingler";
+    pkmn["37"] = "Koffing";
+    pkmn["4e"] = "Krabby";
+    pkmn["13"] = "Lapras";
+    pkmn["04"] = "lefairy";
+    pkmn["0b"] = "Lickitung";
+    pkmn["08"] = "lowbro";
+    pkmn["7e"] = "Machamp";
+    pkmn["29"] = "Machoke";
+    pkmn["6a"] = "Machop";
+    pkmn["85"] = "Magikarp";
+    pkmn["33"] = "Magmar";
+    pkmn["ad"] = "Magnemite";
+    pkmn["36"] = "Magneton";
+    pkmn["39"] = "Mankey";
+    pkmn["91"] = "Marowak";
+    pkmn["4d"] = "Meowth";
+    pkmn["7c"] = "Metapod";
+    pkmn["15"] = "Mew";
+    pkmn["83"] = "Mewtwo";
+    pkmn["49"] = "Moltres";
+    pkmn["2a"] = "Mr. Mime";
+    pkmn["88"] = "Muk";
+    pkmn["10"] = "Nidoqueen";
+    pkmn["0f"] = "Nidoran♀";
+    pkmn["a8"] = "Nidorina";
+    pkmn["a7"] = "Nidorino";
+    pkmn["53"] = "Ninetales";
+    pkmn["b9"] = "Oddish";
+    pkmn["06"] = "oltorb";
+    pkmn["62"] = "Omanyte";
+    pkmn["63"] = "Omastar";
+    pkmn["22"] = "Onix";
+    pkmn["6d"] = "Paras";
+    pkmn["2e"] = "Parasect";
+    pkmn["05"] = "pearow";
+    pkmn["90"] = "Persian";
+    pkmn["97"] = "Pidgeot";
+    pkmn["96"] = "Pidgeotto";
+    pkmn["24"] = "Pidgey";
+    pkmn["54"] = "Pikachu";
+    pkmn["1d"] = "Pinsir";
+    pkmn["47"] = "Poliwag";
+    pkmn["6e"] = "Poliwhirl";
+    pkmn["6f"] = "Poliwrath";
+    pkmn["a3"] = "Ponyta";
+    pkmn["aa"] = "Porygon";
+    pkmn["75"] = "Primeape";
+    pkmn["2f"] = "Psyduck";
+    pkmn["55"] = "Raichu";
+    pkmn["a4"] = "Rapidash";
+    pkmn["a6"] = "Raticate";
+    pkmn["a5"] = "Rattata";
+    pkmn["12"] = "Rhyhorn";
+    pkmn["60"] = "Sandshrew";
+    pkmn["61"] = "Sandslash";
+    pkmn["1a"] = "Scyther";
+    pkmn["5d"] = "Seadra";
+    pkmn["9e"] = "Seaking";
+    pkmn["3a"] = "Seel";
+    pkmn["17"] = "Shellder";
+    pkmn["25"] = "Slowpoke";
+    pkmn["84"] = "Snorlax";
+    pkmn["b1"] = "Squirtle";
+    pkmn["98"] = "Starmie";
+    pkmn["1b"] = "Staryu";
+    pkmn["1e"] = "Tangela";
+    pkmn["3c"] = "Tauros";
+    pkmn["18"] = "Tentacool";
+    pkmn["9b"] = "Tentacruel";
+    pkmn["69"] = "Vaporeon";
+    pkmn["77"] = "Venomoth";
+    pkmn["41"] = "Venonat";
+    pkmn["9a"] = "Venusaur";
+    pkmn["be"] = "Victreebel";
+    pkmn["bb"] = "Vileplume";
+    pkmn["52"] = "Vulpix";
+    pkmn["09"] = "Ivysaur";
+    pkmn["b3"] = "Wartortle";
+    pkmn["70"] = "Weedle";
+    pkmn["bd"] = "Weepinbell";
+    pkmn["8f"] = "Weezing";
+    pkmn["65"] = "Wigglytuff";
+    pkmn["4b"] = "Zapdos";
+    pkmn["6b"] = "Zubat";
+}
+
+
+void SavEdit::printPkmnlist()
+{
+    /*
+     * Print pokemon list
+     */
+    std::cout << "\n[Pokemon]\n" << std::endl;
+
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s%-18s\n","94: Abra","59: Dragonair","16: Gyarados","AD: Magnemite","97: Pidgeot","08: Slowbro","6B: Zubat");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","AB: Aerodactyl","42: Dragonite","93: Haunter","36: Magneton","96: Pidgeotto","25: Slowpoke");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","95: Alakazam","58: Dratini","2C: Hitmonchan","39: Mankey","24: Pidgey","84: Snorlax");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","2D: Arbok","30: Drowzee","2B: Hitmonlee","91: Marowak","54: Pikachu","05: Spearow");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","14: Arcanine","76: Dugtrio","5C: Horsea","4D: Meowth","1D: Pinsir","B1: Squirtle");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","4A: Articuno","66: Eevee","81: Hypno","7C: Metapod","47: Poliwag","98: Starmie");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","72: Beedrill","6C: Ekans","09: Ivysaur","15: Mew","6E: Poliwhirl","1B: Staryu");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","BC: Bellsprout","35: Electabuzz","64: Jigglypuff","83: Mewtwo","6F: Poliwrath","1E: Tangela");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","1C: Blastoise","8D: Electrode","68: Jolteon","49: Moltres","A3: Ponyta","3C: Tauros");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","99: Bulbasaur","0C: Exeggcute","48: Jynx","2A: Mr. Mime","AA: Porygon","18: Tentacool");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","7D: Butterfree","0A: Exeggutor","5A: Kabuto","88: Muk","75: Primeape","9B: Tentacruel");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","7B: Caterpie","40: Farfetch'd","5B: Kabutops","07: Nidoking","2F: Psyduck","69: Vaporeon");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","28: Chansey","23: Fearow","26: Kadabra","10: Nidoqueen","55: Raichu","77: Venomoth");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","B4: Charizard","67: Flareon","71: Kakuna","03: Nidoran(M)","A4: Rapidash","41: Venonat");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","B0: Charmander","19: Gastly","02: Kangaskhan","0F: Nidoran(F)","A6: Raticate","9A: Venusaur");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","B2: Charmeleon","0E: Gengar","8A: Kingler","A8: Nidorina","A5: Rattata","BE: Victreebel");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","8E: Clefable","A9: Geodude","37: Koffing","A7: Nidorino","01: Rhydon","BB: Vileplume");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","04: Clefairy","BA: Gloom","4E: Krabby","53: Ninetales","12: Rhyhorn","06: Voltorb");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","8B: Cloyster","82: Golbat","13: Lapras","B9: Oddish","60: Sandshrew","52: Vulpix");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","11: Cubone","9D: Goldeen","0B: Lickitung","62: Omanyte","61: Sandslash","B3: Wartortle");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","78: Dewgong","80: Golduck","7E: Machamp","63: Omastar","1A: Scyther","70: Weedle");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","3B: Diglett","31: Golem","29: Machoke","22: Onix","5D: Seadra","BD: Weepinbell");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","4C: Ditto","27: Graveler","6A: Machop","6D: Paras","9E: Seaking","8F: Weezing");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","74: Dodrio","0D: Grimer","85: Magikarp","2E: Parasect","3A: Seel","65: Wigglytuff");
+    printf("%-18s%-18s%-18s%-18s%-18s%-18s\n","46: Doduo","21: Growlithe","33: Magmar","90: Persian","17: Shellder","4B: Zapdos");
+}
 
 void SavEdit::printMovelist()
 {
     /*
      * Print move options.
      */
+    std::cout << "\n[Moveset]\n" << std::endl;
+
     printf("%-18s%-18s%-18s%-18s%-18s\n","01: Pound","22: Body Slam","43: Low Kick","64: Teleport","85: Amnesia");
     printf("%-18s%-18s%-18s%-18s%-18s\n","02: Karate Chop","23: Wrap","44: Counter","65: Night Shade","86: Kinesis");
     printf("%-18s%-18s%-18s%-18s%-18s\n","03: Double Slap","24: Take Down","45: Seismic Toss","66: Mimic","87: Soft-Boiled");
@@ -42,24 +272,28 @@ void SavEdit::printMovelist()
     printf("%-18s%-18s%-18s%-18s%-18s\n","1f: Fury Attack","40: Peck","61: Agility","82: Skull Bash","a3: Slash");
     printf("%-18s%-18s%-18s%-18s%-18s\n","20: Horn Drill","41: Drill Peck","62: Quick Attack","83: Spike Cannon","a4: Substitute");
     printf("%-18s%-18s%-18s%-18s%-18s\n","21: Tackle","42: Submission","63: Rage","84: Constrict","a5: Struggle");
-
 }
 
 int SavEdit::selectStat()
 {
+    /*
+     * The main state for the user to make edits to their party.
+     */
+
     bool safe = false;
     int stat_val_offset;
 
-    std::cout << "1: Hitpoints\n";
-    std::cout << "2: Level\n";
-    std::cout << "3: Attack\n";
-    std::cout << "4: Defense\n";
-    std::cout << "5: Speed\n";
-    std::cout << "6: Special\n";
-    std::cout << "7: MOVE 1\n";
-    std::cout << "8: MOVE 2\n";
-    std::cout << "9: MOVE 3\n";
-    std::cout << "0: MOVE 4\n" << std::endl;
+    std::cout << " 1: Hitpoints\n";
+    std::cout << " 2: Level\n";
+    std::cout << " 3: Attack\n";
+    std::cout << " 4: Defense\n";
+    std::cout << " 5: Speed\n";
+    std::cout << " 6: Special\n";
+    std::cout << " 7: MOVE 1\n";
+    std::cout << " 8: MOVE 2\n";
+    std::cout << " 9: MOVE 3\n";
+    std::cout << " 0: MOVE 4\n";
+    std::cout << "10: Pokemon\n" << std::endl;
 
     while(!safe)
     {
@@ -68,7 +302,7 @@ int SavEdit::selectStat()
         switch(stat_val_offset)
         {
             case 1:
-                stat_val_offset = 0x2B; // 0x0A is CURRENTLY HP
+                stat_val_offset = 0x2B; // NOTE: 0x0A is CURRENTLY HP
                 safe = true;
                 break;
             case 2:
@@ -107,6 +341,10 @@ int SavEdit::selectStat()
                 stat_val_offset = 0x13;
                 safe = true;
                 break;
+            case 10:
+                stat_val_offset = 0x01;
+                safe = true;
+                break;
             default:
                 std::cout << "Try again." << std::endl;
                 break;
@@ -126,13 +364,43 @@ void SavEdit::modMainMenu()
     int stat_val_offset;
     int state_value;
 
-    //TODO: Display party list
-    
-    //TODO: Allow user to select party member
-    party_member_offset = 0;
+    int party_member = 0;
+
+    // Create the pkmn name map
+    pkmnMap(); 
+
+    //TODO: Display party list + stats
+
+    std::cout << "Select party member: " << std::endl;
+
+    while((party_member > 6) || (party_member < 1))
+    {
+        std::cin >> party_member;
+
+        if((party_member > 6) || (party_member < 1))
+        {
+            std::cout << "wrong input. Try again." << std::endl;
+        }
+    }
+
+    // Zero-indexed update
+    party_member-=1;
+
+    // Display party member being edited.
+    // First we need to convert deci -> hex before searching.
+    std::stringstream mem_to_hex;
+    // The addr has to be hard coded.
+    mem_to_hex << std::hex << mem.at(0x2F2C + (party_member +0x01));
+    // Convert to a string.
+    std::string char_loc(mem_to_hex.str());
+    std::cout << "[EDITING: " << pkmn[char_loc] << "]" << std::endl;
 
     // Get the stat address
     stat_val_offset = selectStat();
+
+    // The party member attribute block is +44 times its party position
+    // with an exception for the pkmn id.
+    party_member_offset = 44 * party_member;
 
     // Get stat value
     std::cout << "What would you like to set this to?" << std::endl;
@@ -144,6 +412,13 @@ void SavEdit::modMainMenu()
     {
         printMovelist();
         // Move sets require hex.
+        std::cin >> std::hex >> state_value;
+    }else if (stat_val_offset == 0x01){
+        // The only value not in the +44(n-1), where n is party pos, block is
+        // the pkmn id.
+        party_member_offset = party_member;
+        printPkmnlist();
+        // Pokemon list requires hex.
         std::cin >> std::hex >> state_value;
     }else{
         // All other stats require deci.
@@ -160,29 +435,10 @@ void SavEdit::modStats(int party_member_offset, int stat_val_offset, int state_v
      * Edit given party member's given stat.
      */
 
-    /* offset list
-     * ID : 0x01
-     * HP : 0x0A
-     * LVL: 0x29 
-     * ATK: 0x2D
-     * DEF: 0x2F
-     * SPD: 0x31
-     * SPE: 0x33
-     * --
-     * MOVES
-     * MOVE 1: 0x2F3C ?
-     * MOVE 2: 0x2F3D ?
-     * MOVE 3: 0x2F3E ?
-     * MOVE 4: 0x2F3F ?
-     */
-
-
     // Start of memory block for the party 
     int party_offset = 0x2F2C;
 
-    //int party_member_offset;
-    //int stat_val_offset;
-    //int state_value;
+    // Final memory address to edit.
     int mem_to_edit;
 
     // jump to proper memory

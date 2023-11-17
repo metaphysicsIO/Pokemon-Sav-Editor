@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
 
 class SavEdit
 {
@@ -28,6 +29,8 @@ class SavEdit
         void clear();
         void debug();
         void displayItems();
+        void pkmnMap();
+        void printPkmnlist();
         void printMovelist();
         int selectStat();
         void modMainMenu();
@@ -39,6 +42,7 @@ class SavEdit
         enum language{en_US=0, ie_gle=1, ja_jp=2};
         int lang;
         int m_changes = 0;
+        std::map<std::string, std::string> pkmn;
 };
 
 #endif

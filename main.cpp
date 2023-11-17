@@ -44,6 +44,10 @@ int main(int argc, char *argv[])
     //save.modStats();
     save.modMainMenu();
     std::cout << "stats modified." << std::endl;
+    
+    // Print testing
+    //save.printPkmnlist();
+    //save.printMovelist();
 
     // Test the rival.
     //save.modify(0x25F6, 0x25FC);
