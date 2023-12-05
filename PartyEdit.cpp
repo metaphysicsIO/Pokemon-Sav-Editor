@@ -1,3 +1,11 @@
+/* Programmer's name: Ashton
+ * Contact info: [HIDDEN]
+ * Date Created: Nov 18, 2023
+ * Version: 1.0.0
+ * Purpose: Edit the user's party and their individual attributes.
+ * Issues: None noticed at the moment.
+ */
+
 #include <iostream>
 #include <cstring>
 #include <iomanip>
@@ -5,38 +13,6 @@
 
 #include "SavEdit.h"
 
-
-/*
- *      NOTES FOR MYSELF: DELETE LATER.
- *
- * Noticed a big difference between Party 1 and Party 2 ID when compared
- * to their respective attributes.
- *
- * The range between Party #2's ID and MOVE 1 is 3A.
- * The range between Party #1's ID and MOVE 1 is F.
- * 
- * That is 2B, or 43 spaces between them. 
- * 
- * There is also a possibly 2nd ID for P#2 at 0x2F4C
- * which would come out to 1C. I suspect this isn't correc.t
- * 
- * But I may have solved it
- *
- * Let's see the difference between P1.ATK, P2.ATK and P1.DEF, P2.DEF:
- * P1.ATK - P2.ATK is |0x2f59 - 0x2F85| = 2C (44)
- * P1.DEF - P2.DEF is |0x2F5B - 0x2F87| = 2C (44)
- * 
- * So for stats, we can simply add 44(n) where n is the party #-1.
- * What about for moves?
- * 
- * P1.MOVE1 - P2.MOVE1 is |0x2F3C - 0x2F68| = 2C (44)
- * 
- * This is fine. This means the identification change will be
- * 0x2F2C + n, where n is the party number and the stats will
- * be changed with the memory offset + 44(n-1), where n is the party number.
- *
- *
- */
 
 void SavEdit::pkmnMap()
 {
@@ -349,10 +325,30 @@ int SavEdit::selectStat()
                 std::cout << "Try again." << std::endl;
                 break;
         }
-
+        // clear buf
+        std::cin.clear();
+        std::cin.ignore();
     }
 
     return stat_val_offset;
+}
+
+void SavEdit::printParty()
+{
+    /*
+     * Iterates through current party.
+     */
+    for(int i = 0; i < 6; ++i)
+    {
+        std::stringstream mem_to_hex;
+        mem_to_hex << std::hex << mem.at(0x2F2C + (i + 1) + 0x01);
+        std::string char_loc(mem_to_hex.str());
+        std::cout << i + 1 << ": " << pkmn[char_loc] << std::endl;
+        //std::cout << i + 1 << ": " << mem.at(0x2F2C + (i+1) + 0x01) << std::endl;
+        //std::string party_mem = mem.at(0x2F2C + (i+1));
+        //std::string party_name = mem.at(party_mem + 0x01); // Name offset. 
+        //std::cout << i+1 << ": " << party_name << std::endl;
+    }
 }
 
 void SavEdit::modMainMenu()
@@ -369,7 +365,9 @@ void SavEdit::modMainMenu()
     // Create the pkmn name map
     pkmnMap(); 
 
-    //TODO: Display party list + stats
+    // Print a list of party members for the user to edit
+    printParty();
+    
 
     std::cout << "Select party member: " << std::endl;
 
@@ -390,7 +388,7 @@ void SavEdit::modMainMenu()
     // First we need to convert deci -> hex before searching.
     std::stringstream mem_to_hex;
     // The addr has to be hard coded.
-    mem_to_hex << std::hex << mem.at(0x2F2C + (party_member +0x01));
+    mem_to_hex << std::hex << mem.at(0x2F2C + (party_member + 0x01));
     // Convert to a string.
     std::string char_loc(mem_to_hex.str());
     std::cout << "[EDITING: " << pkmn[char_loc] << "]" << std::endl;
@@ -416,7 +414,7 @@ void SavEdit::modMainMenu()
     }else if (stat_val_offset == 0x01){
         // The only value not in the +44(n-1), where n is party pos, block is
         // the pkmn id.
-        party_member_offset = party_member;
+        party_member_offset = party_member+1;
         printPkmnlist();
         // Pokemon list requires hex.
         std::cin >> std::hex >> state_value;

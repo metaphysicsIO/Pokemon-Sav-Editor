@@ -29,7 +29,6 @@ void SavEdit::modify(const int BEGIN, const int END)
     // Prevent the user from breaking limits.
     while(!correct)
     {
-        // TODO: Clear / Redraw screen
         std::cout << "input: ";
 
         std::cin >> s;
@@ -114,11 +113,12 @@ bool SavEdit::select()
 {
     /*
      * A giant switch for determining which offsets to edit.
-     *
-     * TODO: May want to break this down into something else.
      */
 
-    // For the loop. I might not keep it like this.
+    // Make room.
+    clear();
+
+    // For the loop.
     bool finished = false;
 
     // Check for correct input.
@@ -131,15 +131,12 @@ bool SavEdit::select()
     // Check if supported.
     while(!correct)
     {
-        // TODO: translate + create subroutine
-        // TODO: Clear / Redraw Screen
-        // TODO: Create a better menu
+        // TODO: Add party edit option
         std::cout << "EDIT: " << std::endl;
-        std::cout << "\t1. Player Name" << std::endl;
+        std::cout << "\t1. PLAYER Name" << std::endl;
         std::cout << "\t2. RIVAL Name" << std::endl;
         std::cout << "\t3. MONEY" << std::endl;
-        //std::cout << "\t4. QUIT, DO NOT SAVE" << std::endl;
-        std::cout << "\t4. EDIT ITEM #0." << std::endl;
+        std::cout << "\t4. PARTY." << std::endl;
         std::cout << "\t0. SAVE AND QUIT" << std::endl;
         std::cout << "YOUR INPUT: ";
 
@@ -154,8 +151,6 @@ bool SavEdit::select()
         std::cin.clear();
     }
 
-
-    // TODO: Allow for custom edits?
 
     switch(selection)
     {
@@ -175,16 +170,11 @@ bool SavEdit::select()
             break;
         case 3:
             std::cout << "EDITING MONEY:" << std::endl;
-            //std::cout << "SETTING TO 999,999 POKEDOLLARS." << std::endl;
-            //mem.at(0x25F3) = 99;
-            //mem.at(0x25F4) = 99;
-            //mem.at(0x25F5) = 99;
             cashModify();
-            //modify(0x25F3, 0x25F5); 
             break;
         case 4:
-            std::cout << "Quitting without saving." << std::endl;
-            finished = true;
+            std::cout << "EDITING PARTY:" << std::endl;
+            modMainMenu();
             break;
         default:
             std::cout << "NOT AN OPTION" << std::endl;

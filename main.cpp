@@ -4,6 +4,9 @@
 
 int main(int argc, char *argv[])
 {
+    // boolean for keeping the main loop going
+    bool done = false;
+
     // Create obj
     SavEdit save;
 
@@ -13,49 +16,20 @@ int main(int argc, char *argv[])
         save.setFilename(argv[1]);
     }
 
-
-    // Select language.
-    //save.languageForm();
-    
-    // Send greeting.
-    //save.greeting();
-
-    // store file in vector
+    // Open the file
     save.open();
 
-    // print vector
-    //save.read();
-
-    // create the backup
+    // Create the backup
     save.backup();
 
-    // Test OT
-    //save.modify(0x2598, 0x259E);
-
-    // TEST OPTIONS
-    bool done = true; //false;
+    // Start the main loop.
     while(!done)
         done = save.select();
 
-    // To make things faster.
-    //save.debug();
-
-    // testing modStats
-    //save.modStats();
-    save.modMainMenu();
-    std::cout << "stats modified." << std::endl;
-    
-    // Print testing
-    //save.printPkmnlist();
-    //save.printMovelist();
-
-    // Test the rival.
-    //save.modify(0x25F6, 0x25FC);
-
-    // Update the checksum.
+    // Update the checksum
     save.checksum();
 
-    // Save the new file
+    // Save and close the file.
     save.saveNewFile();
 
     return 0;

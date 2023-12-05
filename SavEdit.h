@@ -35,7 +35,7 @@ class SavEdit
         int selectStat();
         void modMainMenu();
         void modStats(int, int, int);
-
+        void printParty();
     private:
         std::string filename;
         std::vector<int> mem;
