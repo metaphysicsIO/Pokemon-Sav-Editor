@@ -154,3 +154,131 @@ number 2 is, probably.
 
 
 
+---------
+# Added in another text file I was using for notes:
+
+
+# EDIT POKEMON
+[DEBUG] memory address edited: 12077
+[DEBUG] party_member_offset: 0
+[DEBUG] stat_val_offset: 1
+[DEBUG] state_value: 116
+
+# EDIT POKEMON ATK
+[DEBUG] memory address edited: 12077
+[DEBUG] party_member_offset: -44
+[DEBUG] stat_val_offset: 45
+[DEBUG] state_value: 100
+
+# EDIT POKEMON DEF
+[DEBUG] memory address edited: 12079
+[DEBUG] party_member_offset: -44
+[DEBUG] stat_val_offset: 47
+[DEBUG] state_value: 76
+
+-- After removal of +44 --
+
+# EDIT POKEMON ATK (76)
+[DEBUG] memory address edited: 12033
+[DEBUG] party_member_offset: -88
+[DEBUG] stat_val_offset: 45
+[DEBUG] state_value: 76
+
+# EDIT POKEMON DEFENSE (76)
+[DEBUG] memory address edited: 12035
+[DEBUG] party_member_offset: -88
+[DEBUG] stat_val_offset: 47
+[DEBUG] state_value: 76
+
+# EDIT POKEMON -> DODUO
+[DEBUG] memory address edited: 12077
+[DEBUG] party_member_offset: 0
+[DEBUG] stat_val_offset: 1
+[DEBUG] state_value: 70
+
+# EDIT POKEMON DEFENSE (74)
+[DEBUG] memory address edited: 12035
+[DEBUG] party_member_offset: -88
+[DEBUG] stat_val_offset: 47
+[DEBUG] state_value: 74
+
+---
+LV: 7
+HP: ??
+ATK: 13
+DEF: 11
+SPD: 15
+SPE: 13
+MOV1: SCRATCH [0A]
+MOV2: GROWL [2D]
+MOV3: --
+MOV4: --
+
+--
+Lv 4
+hp: 17
+atk: 8
+spe: 8 
+move1: Gust [0x10]
+
+
+--
+RATTATA [A5]
+LV 3
+15 HP
+8 ATK
+7 DEF
+9 SPD
+6 SPC
+MOVE1: TACKLE
+MOVE2: TAIL :47
+WHIP
+
+
+---
+Pidgy
+LV 4
+17 HP
+8 ATK
+8 DEF
+10 SPD
+8 SPC
+
+---
+
+0x2f29 + (44 * i) + (2 * j)
+i = slot number, j = stat-type
+
+------------
+modStats(2
+
+
+[EDITING: Charmander]
+LVL: 23
+HP: 13
+ATK: 11
+DEF: 15
+SPD: 13
+SPE: 0
+
+-----
+
+PARTY #2: 
+    PECK [40]
+    GROWL [2D]
+
+PARTY #3:
+    LEER [2B]
+    TACKLE [21]
+
+
+ALGO: 
+0x2F0F + (2C * position) + MOVE_NUMBER
+
+
+
+printMoves
+printStats
+
+
+0x2f0f + (0x2C * party_member);
