@@ -38,3 +38,119 @@ NOTE: This is the identifier for ITEM #0
 OFFSET: 0x25CB
 NOTE: This is the quantity for ITEM #0
 
+
+---------
+# Trying to find the party stats.
+---------
+
+00002F2C: THE AMOUNT OF PARTY MEMBERS.  * note: The next slot MAY need to be 0xFF?
+00002F2D: PARTY #1 SPECIES ID
+00002F2E: PARTY #2 SPECIES ID
+00002F2F: PARTY #3 SPECIES ID
+00002F30: PARTY #4 SPECIES ID
+00002F31: PARTY #5 SPECIES ID
+00002F32: PARTY #6 SPECIES ID
+
+** START NTOES **
+note: (0x2F2C + 0x2A + SLOT_NUM(0x01) 
+note: (0x2F2C + (0x2B * 0x02) - 0x01 + 2C(SLOT_NUM - 0x01)
+It may be 0x2F2C + 0x2B (SLOT_NUM) - 
+
+I can arrive at the Party #1 attrib with:
+>0x2f2c + (0x29 * 1) = 0x2f57 (PARTY #1 HP)
+This is fine. No additions required.
+
+But we want 0x2f81 for party #2. This means
+>0x2f2c + (0x29 * 2) = 0x2f7e
+So we need to add 3 to this.
+
+We want 0x2fad for party #3. 
+>0x2f2c + (0x29 * 3) = 0x2fa7
+So we need to add 6 to this.
+
+Perhaps I need to consider this algorithm instead:
+0x2f2c + (0x29 * n) + (3 * (n - 1))
+This makes for: 0x2FC7
+
+(ALSO, please check to see if 0x2f31 changes to 255)
+(if it does, the next memory point has to be 0xff)
+(in the list.) <-- (UPDATE: It does)
+
+-- trying this:
+
+Subtracting the addr of P3.SPE - P2.SPE:
+0x2FB7 - 0x2F8B = 2C [44]
+
+0x2F8B - 0x2C = 0x2F5F (P1.SPE)
+
+By this logic, adding 0x2C to P3.SPE should send me to
+P4.SPE, right?
+
+00002FE3:  08 (the 4th party has 8sp.)
+
+So, we should just have a starting point, jump to the point
+0x2f29. Then we can just add 44i, where i is the position.
+Then we add 2j where j is the attribute type. LVL=0, HP=1, 
+and so on.
+
+** END NOTES **
+
+00002F55: PARTY #1 LVL
+00002F57: PARTY #1 HP
+00002F59: PARTY #1 ATK
+00002F5B: PARTY #1 DEF
+00002F5D: PARTY #1 SPD
+00002F5F: PARTY #1 SPE
+
+00002F81: PARTY #2 LVL
+00002F83: PARTY #2 HP
+00002F85: PARTY #2 ATK
+00002F87: PARTY #2 DEF
+00002F89: PARTY #2 SPD
+00002F8B: PARTY #2 SPE
+
+00002FAD: PARTY #3 LVL
+00002FAF: PARTY #3 HP
+00002FB1: PARTY #3 ATK
+00002FB3: PARTY #3 DEF
+00002FB5: PARTY #3 SPD
+00002FB7: PARTY #3 SPE
+
+
+** Notes on move list **
+
+00002F3C: PARTY #1 MOVE 1
+00002F3D: PARTY #1 MOVE 2
+00002F3E: PARTY #1 MOVE 3
+00002F3F: PARTY #1 MOVE 4
+
+00002F68: PARTY #2 MOVE 1
+00002F69: PARTY #2 MOVE 2
+00002F6A: PARTY #2 MOVE 3
+00002F6B: PARTY #2 MOVE 4
+
+So, it looks like this is another (2C * position) situation [+44]
+If this is true then PARTY #3 MOVE 1 will be: 0x2f94
+
+IT WAS. THANK GOD. So the starting point is:
+0x2F0F + (2C * position) + MOVE_NUMBER
+(ALT: 0x2f10 + (2c * position) + (MOVE_NUMBER-1)) but that seems pointlessly
+long.
+
+00002F94: PARTY #3 MOVE 1
+00002F95: PARTY #3 MOVE 2
+00002F96: PARTY #3 MOVE 3
+00002F97: PARTY #3 MOVE 4
+
+
+
+I need to catch a pokemon to see what
+number 2 is, probably.
+
+
+
+** END notes on move list **
+
+
+
+

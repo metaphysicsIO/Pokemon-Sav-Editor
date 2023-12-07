@@ -30,12 +30,15 @@ class SavEdit
         void debug();
         void displayItems();
         void pkmnMap();
+        void moveMap();
         void printPkmnlist();
         void printMovelist();
         int selectStat();
         void modMainMenu();
-        void modStats(int, int, int);
+        void modStats(int, int);
         void printParty();
+        void printStats(int);
+        void printMoves(int);
     private:
         std::string filename;
         std::vector<int> mem;
@@ -43,6 +46,7 @@ class SavEdit
         int lang;
         int m_changes = 0;
         std::map<std::string, std::string> pkmn;
+        std::map<std::string, std::string> move;
 };
 
 #endif
