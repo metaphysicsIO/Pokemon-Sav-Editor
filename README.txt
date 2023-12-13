@@ -6,7 +6,7 @@ This is a command-line, GNU/Linux supported Pokemon SAV editor.
 It currently only supports Pokemon Red and Blue.
 
 I was going to go with my normal naming theme, but thought "Mionathraìm SAV"
-might be too hard to type/pronounce.. So, it'll be "Pokemon Sav Editor (PSE)"
+might be too hard to type/pronounce. So, it'll be "Pokemon Sav Editor (PSE)"
 and in the sub-title we'll call it "Mionathraìm SAV".
 
 ## Why a pokemon sav editor?
@@ -32,15 +32,19 @@ something I'm doing.
 
 ## What actually works?
 
-You can change your name, your rival's name, and the amount of pokedollars you
-have.
 
-Right now I'm working on getting the data for editing items in the player's
-pocket and I have plans to make an edit subroutine for the actual pokemon
-themselves. Once the editor subroutine is finished, I will simply need to setup
-the offsets per party, then per box. I'll worry about pokemon editing later
-though.
 
+You can change your name, your rival's name, your pokedollars, and your
+party's species and stats. 
+
+I technically have the item editing working, but you'd have to edit
+the code to access that. I will probably implement that soon enough.
+
+## Plans
+
+* Item editing
+
+* View, Edit pokemon in each box.
 
 
 ## How to run
