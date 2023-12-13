@@ -178,6 +178,9 @@ void SavEdit::modMainMenu()
     // Print a list of party members for the user to edit
     printParty();
 
+    // TODO: Stay on this party member until the user is done editing,
+    //       then just roll back to party selection.
+    // TODO: I think we need back buttons and state handling here.
     std::cout << "Select party member: ";
 
     while((party_member > 6) || (party_member < 1))
