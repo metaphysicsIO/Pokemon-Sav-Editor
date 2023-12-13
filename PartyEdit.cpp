@@ -27,7 +27,6 @@
 
 #include "SavEdit.h"
 
-
 int SavEdit::selectStat()
 {
     /*
@@ -105,6 +104,7 @@ int SavEdit::selectStat()
                 std::cout << "Try again." << std::endl;
                 break;
         }
+
         // clear buffer
         std::cin.clear();
         std::cin.ignore();
@@ -175,11 +175,6 @@ void SavEdit::modMainMenu()
     // Make room
     clear();
 
-    // Create the pkmn name map
-    pkmnMap(); 
-    // Create the move name map
-    moveMap();
-
     // Print a list of party members for the user to edit
     printParty();
 
@@ -195,8 +190,6 @@ void SavEdit::modMainMenu()
         }
     }
 
-    // Display party member being edited:
-    
     // Make room again
     clear();
 
@@ -241,7 +234,6 @@ void SavEdit::modMainMenu()
             printMovelist();
             std::cin >> std::hex >> state_value; // TODO: Check user input
             party_member_offset = (start_point - 0x1A) + (0x2C * party_member) + (stat_val_offset - 0x0F); 
-            //party_member_offset = 0x2f0f + (0x2C * party_member) + (stat_val_offset - 0x0F);
             break;
         default:
             party_member_offset = start_point + (44 * party_member) + (stat_val_offset * 0x02);

@@ -9,7 +9,14 @@ SavEdit::SavEdit()
      */
 
     filename = "Pokemon - Red Version (USA, Europe) (SGB Enhanced).sav";
+    
     lang = en_US;
+
+    // Generate the hashmaps
+    pkmnMap();
+    moveMap();
+    //TODO: itemMap();
+
 }
 
 std::string SavEdit::getFilename()
